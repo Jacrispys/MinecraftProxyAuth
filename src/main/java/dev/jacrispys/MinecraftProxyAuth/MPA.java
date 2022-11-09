@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Random;
 
 public class MPA extends Plugin implements Listener {
@@ -40,7 +41,9 @@ public class MPA extends Plugin implements Listener {
     @EventHandler
     public void onPostLogin(PostLoginEvent e) throws SQLException {
         String key = generateKey();
-        connection.createStatement().executeUpdate("REPLACE INTO mc_auth (`key`, ign, uuid) values ('" + key + "', '" + e.getPlayer().getName() + "', '" + e.getPlayer().getUniqueId() + "');");
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate("REPLACE INTO mc_auth (`key`, ign, uuid) values ('" + key + "', '" + e.getPlayer().getName() + "', '" + e.getPlayer().getUniqueId() + "');");
+        stmt.close();
         String kickMsg = color("&c&lAuthorizing User: " + e.getPlayer().getName() + "(" + e.getPlayer().getUniqueId() + ")...\n" +
                 "&b&lPlease enter Code below into discord! This code will be used to link your minecraft account to the server.\n\n" +
                 "&9&lCode: &e&l" + key);
@@ -101,7 +104,7 @@ public class MPA extends Plugin implements Listener {
         this.thread = new Thread(() -> {
             try {
                 while (true) {
-                    if (!connection.isClosed())  {
+                    if (!connection.isClosed()) {
                         Thread.sleep(3600000);
                         return;
                     }
