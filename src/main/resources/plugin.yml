@@ -1,0 +1,4 @@
+name: MinecraftProxyAuth
+main: dev.jacrispys.MinecraftProxyAuth.MPA
+version: 0.1
+author: Jacrispys
